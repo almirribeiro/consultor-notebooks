@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import os
 import json
 from supabase import create_client, Client
+from amazon_api import AmazonAPI
 
 # Função principal que a Vercel vai executar
 class handler(BaseHTTPRequestHandler):
@@ -33,15 +34,24 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": "Requisição inválida", "details": str(e)}).encode())
             return
 
-        # 3. (FUTURO) Chamar a API da Amazon para buscar dados do ASIN
-        # Por enquanto, vamos simular os dados para testar o fluxo
-        dados_simulados_da_amazon = {
-            "titulo_amazon": f"Notebook Simulado para ASIN {asin}",
-            "preco_atual": 4999.99,
-            "link_afiliado": f"https://www.amazon.com.br/dp/{asin}?tag={os.environ.get("AMAZON_AFFILIATE_TAG")}",
-            "url_imagem": "https://via.placeholder.com/150",
-            "disponivel": True
-        }
+        # 3. Chamar a API da Amazon para buscar dados do ASIN
+        try:
+            amazon_api = AmazonAPI()
+            dados_da_amazon = amazon_api.get_item_info(asin)
+            
+            if not dados_da_amazon:
+                self.send_response(404)
+                self.send_header("Content-type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": f"Produto com ASIN {asin} não encontrado na Amazon"}).encode())
+                return
+                
+        except Exception as e:
+            self.send_response(500)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "Falha ao buscar dados da Amazon", "details": str(e)}).encode())
+            return
 
         # 4. Inserir/Atualizar os dados no Supabase
         try:
@@ -49,9 +59,9 @@ class handler(BaseHTTPRequestHandler):
             # Se não existir, insere um novo (upsert=True)
             data, count = supabase.table("notebooks").upsert({
                 "asin": asin,
-                "nome_curto": f"Notebook {asin}", # Provisório
-                "memoria_ram": 16, # Provisório
-                **dados_simulados_da_amazon
+                "nome_curto": dados_da_amazon.get("titulo_amazon", "").split()[0:3],  # Primeiras 3 palavras como nome curto
+                "memoria_ram": self._extract_ram_from_features(dados_da_amazon.get("caracteristicas", [])),
+                **dados_da_amazon
             }).execute()
 
         except Exception as e:
@@ -65,7 +75,20 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
-        response = {"message": f"Notebook com ASIN {asin} processado com sucesso!", "data": dados_simulados_da_amazon}
+        response = {"message": f"Notebook com ASIN {asin} processado com sucesso!", "data": dados_da_amazon}
         self.wfile.write(json.dumps(response).encode())
         return
+
+    def _extract_ram_from_features(self, features):
+        """
+        Extrai informação de RAM das características do produto
+        """
+        for feature in features:
+            if 'GB' in feature and ('RAM' in feature.upper() or 'Memory' in feature):
+                # Tenta extrair o número de GB
+                import re
+                match = re.search(r'(\d+)\s*GB', feature)
+                if match:
+                    return int(match.group(1))
+        return 8  # Valor padrão se não encontrar
 
