@@ -1,6 +1,8 @@
 {
   "functions": {
-    "api/update_notebooks.py": {      "runtime": "python3.11"    }
+    "api/update_notebooks.py": {
+      "runtime": "python3.9"
+    }
   },
   "routes": [
     {
@@ -8,6 +10,11 @@
       "dest": "/api/update_notebooks.py"
     }
   ],
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9.18"
+    }
+  },
   "env": {
     "SUPABASE_URL": "@supabase_url",
     "SUPABASE_SERVICE_KEY": "@supabase_service_key",
