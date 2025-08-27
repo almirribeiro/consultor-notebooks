@@ -3,13 +3,15 @@
   "builds": [
     {
       "src": "api/app.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "runtime": "python3.9" }
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/app.py"
+      "src": "/api/update_notebooks",
+      "dest": "api/app.py",
+      "methods": ["POST"]
     }
   ]
 }
