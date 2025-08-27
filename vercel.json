@@ -8,7 +8,6 @@
     "env": {
       "PYTHON_VERSION": "3.9.18"
     },
-    "src": "./",
     "use": "@vercel/python"
   },
   "outputDirectory": "public"
