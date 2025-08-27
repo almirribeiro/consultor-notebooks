@@ -1,8 +1,6 @@
 {
   "functions": {
-    "api/update_notebooks.py": {
-      "runtime": "python@3.9"
-    }
+    "api/update_notebooks.py": {      "runtime": "python3.11"    }
   },
   "routes": [
     {
