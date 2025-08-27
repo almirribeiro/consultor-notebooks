@@ -3,7 +3,6 @@
     "api/update_notebooks.py": {
       "runtime": "python3.9"
     }
-  },
-  "outputDirectory": "public"
+  }
 }
 
