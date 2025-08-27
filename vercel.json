@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/update_notebooks",
+      "dest": "api/index.py",
+      "methods": ["POST"]
+    }
+  ]
+}
+
