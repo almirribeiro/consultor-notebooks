@@ -13,7 +13,7 @@ class AmazonAPI:
         self.access_key = os.environ.get("AWS_ACCESS_KEY_ID")
         self.secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
         self.associate_tag = os.environ.get("AWS_ASSOCIATE_TAG")
-        self.region = os.environ.get("AWS_REGION", "us-east-1") # PAAPI5 usa us-east-1 para o endpoint global
+        self.region = os.environ.get("AWS_REGION", "sa-east-1") # Definindo a região padrão como sa-east-1
         
         # Endpoint da PAAPI 5.0
         if self.region == "sa-east-1":
@@ -48,7 +48,7 @@ class AmazonAPI:
                 ],
                 "PartnerTag": self.associate_tag,
                 "PartnerType": "Associates",
-                "Marketplace": "www.amazon.com.br"
+                "Marketplace": "www.amazon.com.br" # Definindo o Marketplace explicitamente para o Brasil
             }
             
             # Headers necessários para a PAAPI 5.0
