@@ -1,0 +1,17 @@
+{
+  "functions": {
+    "api/update_notebooks.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "build": {
+    "env": {
+      "SUPABASE_URL": "https://cbyhimgnmiglokhjzzlu.supabase.co",
+      "SUPABASE_SERVICE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieWhpbWdubWlnbG9raGp6emx1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjE5MDc0MCwiZXhwIjoyMDcxNzY2NzQwfQ.zBMcHPWirB2sHYhArXJm0uQWSAgZJWGUQWDzJBeYyz8",
+      "AWS_ACCESS_KEY_ID": "AKPAG569DG1756263766",
+      "AWS_SECRET_ACCESS_KEY": "U3NRA+qDb6j5Kuag9HLoAc48K5+iLOAGM07Q3O+K",
+      "AWS_ASSOCIATE_TAG": "notebookofert-20"
+    }
+  }
+}
+
