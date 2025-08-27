@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "api/update_notebooks.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9.18"
+    },
+    "src": "./",
+    "use": "@vercel/python"
+  },
+  "outputDirectory": "public"
+}
+
